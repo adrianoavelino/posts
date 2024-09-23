@@ -59,7 +59,9 @@ Para simplificar, neste tutorial, utilizaremos o `kafka-console-producer`.
 _Tela do terminal executando Kafka Console Producer na linha de comando_
 
 ## Criação dos arquivos de configuração
-Crie o arquivo `./docker-compose.yml`:
+### Docker Compose
+Começaremos criando o arquivo **docker-compose.yml**, que será responsável por orquestrar os containers do Kafka e do Localstack. Ele define os serviços necessários, como o Kafka (com a imagem **fast-data-dev**) e o Localstack para emular a AWS. Crie o arquivo `./docker-compose.yml` com o seguinte conteúdo:
+
 ```yml
 services:
   fast-data-dev:
@@ -97,7 +99,8 @@ services:
     network_mode: host
 ```
 
-Crie o arquivo `./cloudformation.yml` para criação da Lambda:
+### CloudFormation
+Agora, criaremos um arquivo **cloudformation.yml** para provisionar a função Lambda simulada no Localstack. O arquivo também define as permissões necessárias para a execução da Lambda. Crie o arquivo `./cloudformation.yml` com o seguinte conteúdo:
 ```yml
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'Lambda connector example function'
@@ -137,7 +140,8 @@ Outputs:
     Value: !GetAtt 'ExampleFunctionRole.Arn'
 ```
 
-Crie o arquivo de configuração `./connector-localstack.json`:
+### Configuração do conector Kafka
+Agora, crie o arquivo de configuração do **conector Lambda Sink**. Este arquivo define as propriedades do conector, incluindo o tópico Kafka e a função Lambda a ser invocada. Crie o arquivo `./connector-localstack.json` com o seguinte conteúdo:
 ```json
 {
   "name": "example-lambda-connector-localstack",
@@ -157,16 +161,17 @@ Crie o arquivo de configuração `./connector-localstack.json`:
 }
 ```
 
-Baixe o plugin do conector Lambda Sink e salve numa pasta chamada `plugins`, na raiz do projeto, no mesmo local do seu arquivo **docker-compose.yml**, utilizando o `curl` execute o seguinte comando no terminal:
+### Download do plugin Lambda Sink
+Por fim, faça o **download do plugin Lambda Sink** e salve-o no diretório `./plugins`. Execute o seguinte comando no terminal:
 ```bash
 curl -L -o ./plugins/kafka-connect-lambda-localstack-1.4.0.jar \
 https://github.com/adrianoavelino/kafka-connect-lambda-localstack/releases/download/v1.4.0/kafka-connect-lambda-localstack-1.4.0.jar
 ```
+> A última versão do plugin é a [1.4.0](https://github.com/adrianoavelino/kafka-connect-lambda-localstack/releases/tag/v1.4.0). Para versões mais recentes, consulte as [releases no GitHub](https://github.com/adrianoavelino/kafka-connect-lambda-localstack/releases).
 
-> Atualmente a última versão é a [1.4.0](https://github.com/adrianoavelino/kafka-connect-lambda-localstack/releases/tag/v1.4.0), mas para ter acesso a versão mais atualizada acesse as [releases no Github](https://github.com/adrianoavelino/kafka-connect-lambda-localstack/releases).
-
-Veja abaixo a lista dos arquivos criados:
-```tree
+### Estrutura final do projeto
+Ao finalizar esta etapa, a estrutura de arquivos do projeto deverá ser semelhante a esta:
+```
 .
 ├── cloudformation.yml
 ├── connector-localstack.json
