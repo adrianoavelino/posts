@@ -1,5 +1,5 @@
 ---
-title: Conector Lambda Sink do Kafka com Localstack
+title: Conector Kafka Lambda Sink com Localstack
 published: false
 description: 
 tags: 
@@ -9,14 +9,17 @@ tags:
 ---
 
 ## Introdução
-Ao trabalhar em projetos corporativos é comum movermos informações de um lugar para outro através do Kafka utilizando conectores source e sink. Os conectores source são utilizados para enviar informações aos tópicos Kafka, já os **conectores sink**, enviam para uma fonte externa como um banco de dados, ferramenta de logs ou um recursos na AWS como uma lambda. Hoje vamos falar sobre o conector sink, especificamente o conector Lambda Sink usando o [Localstack](https://www.localstack.cloud/) para "emularmos" o serviço de uma Lambda.
+Ao trabalhar em projetos corporativos, é comum mover informações de um lugar para outro utilizando o Kafka e seus conectores *source* e *sink*. Os conectores *source* são responsáveis por enviar dados aos tópicos Kafka, enquanto os conectores **sink** exportam essas informações para sistemas externos, como bancos de dados, ferramentas de log ou serviços na AWS, como uma *Lambda*. Neste tutorial, abordaremos especificamente o conector *sink*, mais precisamente o **Lambda Sink Connector**, utilizando o [Localstack](https://www.localstack.cloud/) para simular o serviço AWS Lambda.
 
-## Pré requisitos
-- Docker 
-- Docker compose
-- [aws-cli](https://docs.aws.amazon.com/pt_br/cli/latest/userguide/getting-started-install.html)
-- curl ou alguma ferramenta semelhante ao Insomnia.
-- Configurar `~/.aws/config` da seguinte forma:
+## Pré-requisitos
+Antes de começar, certifique-se de ter os seguintes itens configurados no seu ambiente:
+
+- **Docker**: para criar os containers que rodarão o Kafka e o Localstack.
+- **Docker Compose**: para orquestrar os containers.
+- **[AWS CLI](https://docs.aws.amazon.com/pt_br/cli/latest/userguide/getting-started-install.html)**: necessário para executar comandos relacionados à AWS.
+- **cURL ou uma ferramenta similar como o Insomnia**: para realizar requisições HTTP.
+- Arquivo de configuração AWS (`~/.aws/config`) configurado da seguinte forma:
+
 ```bash
 [default]
 region = us-east-1
@@ -24,41 +27,36 @@ output = json
 ```
 
 ## Sobre o projeto
-O objetivo deste projeto é trazer a experiência do desenvolvimento de um ambiente corporativo de forma acessível e sem gastos ou burocracia no uso da Cloud.
+O objetivo deste projeto é simular um ambiente corporativo usando Kafka e AWS Lambda, de forma acessível e sem custos, utilizando o [Localstack](https://www.localstack.cloud/). Isso permite que você emule serviços da AWS localmente, facilitando o desenvolvimento e testes.
+
+No fluxo deste projeto, uma mensagem é enviada por um **producer** para um tópico Kafka, que por sua vez dispara um evento para o conector Kafka Sink. O conector envia essa mensagem para uma função Lambda, conforme ilustrado no diagrama abaixo:
 
 ![Fluxograma do conector Lambda Sink. Producer enviando mensagem para um tópico Kafka que dispara um evento para o conector que envia a mensagem para uma Lambda](./fluxo-conector-lambda-sink.drawio.svg)
 
+Para isso, utilizaremos o **Docker Compose** para gerenciar os containers do Kafka e do Localstack. A imagem Docker **fast-data-dev** será usada para o Kafka, pois já inclui uma interface gráfica e ferramentas como **Zookeeper**, **Kafka Cluster**, **Schema Registry** e **Kafka Connect**. O Localstack será usado para emular serviços da AWS, incluindo a Lambda.
 
-Vamos utilizar um docker-composer contendo o serviço Kafka e o Localstack. No serviço Kafka vamos utilizar uma imagem do fast-data-dev que contém uma interface gráfica e todas as demais ferramentas como Zookeeper, Cluster Kafka, Schema Registry e Kafka Connect. Utilizaremos o Localstack para simular o serviço da AWS e vamos utilizar o aws-cli para executar e para visualizar a Lambda criada, mas se você gostar de algo mais visual, existe uma [interface gráfica](https://docs.localstack.cloud/user-guide/web-application/), caso tenha interesse, tem este [vídeo bem legal sobre o Localstack no Youtube](https://www.youtube.com/watch?v=1ow0NQv5Fsk).
+Se você preferir uma visualização gráfica da Lambda em execução, o Localstack possui uma [interface web](https://docs.localstack.cloud/user-guide/web-application/). Além disso, existe um [vídeo introdutório sobre o Localstack no YouTube](https://www.youtube.com/watch?v=1ow0NQv5Fsk), caso queira entender mais sobre a ferramenta.
 
-![Tela da interface gráfica do Locastack Web mostrando os logs de execução de uma Lambda](./images/tela-localstack-web-logs-lambda.png)
-_Tela da interface gráfica do Locastack Web mostrando os logs de execução de uma Lambda_
+![Tela da interface gráfica do Localstack Web mostrando os logs de execução de uma Lambda](./images/tela-localstack-web-logs-lambda.png)
+_Tela da interface gráfica do Localstack Web mostrando os logs de execução de uma Lambda._
 
-
-O connector Kafka precisa de uma plugin e para isso vamos utilizar o [plugin Lambda Sink](https://github.com/adrianoavelino/kafka-connect-lambda-localstack) com suporte ao Localstack. O plugin que vamos utilizar é um fork do projeto [kafka-connect-lambda](https://github.com/Nordstrom/kafka-connect-lambda) que **"não funciona"** com Localstack (ao menos não consegui executar usando o Localstack), caso tenha interesse fique a vontade para colaborar, contribuições são bem vindas rsrs.
+Para configurar o Kafka Connect, utilizaremos o [plugin Lambda Sink](https://github.com/adrianoavelino/kafka-connect-lambda-localstack) que oferece suporte ao Localstack. Este plugin é um fork do projeto [kafka-connect-lambda](https://github.com/Nordstrom/kafka-connect-lambda), que não funciona com o Localstack. Caso tenha interesse em contribuir, a sua contribuição é bem-vinda!
 
 ![Tela da interface gráfica do fast-data-dev mostrando o conector Lambda Sink](./images/tela-fast-data-dev-conector-lambda-sink.png)
-_Tela da interface gráfica do fast-data-dev mostrando o conector Lambda Sink_
+_Tela da interface gráfica do fast-data-dev mostrando o conector Lambda Sink._
 
-Durante o desenvolvimento do projeto, utilizaremos um **producer** para enviar mensagens ao tópico Kafka. Há diversas opções para isso, como:
+Para enviar mensagens ao tópico Kafka, usaremos um **producer**. Existem diversas opções para isso:
 
-- Linha de comando com o `kafka-console-producer` no container Kafka
-- [Kafkacat](https://github.com/edenhill/kcat)
-- JMeter com o plugin Kafka (veja a seção [Dicas e recomendações](#Dicas-e-recomendações) para detalhes de configuração)
-- Conector Data *source* como o [Voluble](https://github.com/MichaelDrogalis/voluble)
-- Outras ferramentas gráficas ou de linha de comando
-- Ou ainda, criar uma aplicação customizada usando a sua linguagem de programação preferida
+- **Linha de comando**: Usando o `kafka-console-producer` do container Kafka.
+- **[Kafkacat](https://github.com/edenhill/kcat)**: Ferramenta de linha de comando para interagir com o Kafka.
+- **JMeter com o plugin Kafka**: Veja mais detalhes na seção [Dicas e Recomendações](#Dicas-e-Recomendações).
+- **Conector Data Source como o [Voluble](https://github.com/MichaelDrogalis/voluble)**.
+- Criar uma aplicação customizada na sua linguagem de programação preferida.
 
-Neste tutorial, usaremos o `kafka-console-producer` para simplificar o processo e evitar a introdução de mais uma ferramenta.
+Para simplificar, neste tutorial, utilizaremos o `kafka-console-producer`.
 
-![Tela da interface gráfica do Jmeter com um plugin producer Kafka enviado diversas mensagens num tópico Kafka](./images/tela-jmeter-plugin-di-kafkameter-com-producer.png)
-_Tela da interface gráfica do Jmeter com um plugin producer Kafka enviado diversas mensagens num tópico Kafka_
-
-
-
-
-
-
+![Tela do terminal executando Kafka Console Producer na linha de comando](./images/tela-terminal-executando-kafka-console-producer.png)
+_Tela do terminal executando Kafka Console Producer na linha de comando_
 
 ## Criação dos arquivos de configuração
 Crie o arquivo `./docker-compose.yml`:
