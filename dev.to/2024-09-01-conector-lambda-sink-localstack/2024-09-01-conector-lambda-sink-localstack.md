@@ -181,23 +181,21 @@ Ao finalizar esta etapa, a estrutura de arquivos do projeto deverá ser semelhan
 ```
 
 ## Criação da infrastrutura
-
-
-### Criação dos containers
-Inicie os containers docker do Kafka e Localstack:
+### Inicialização dos containers
+Inicie os containers do Kafka e do Localstack com o seguinte comando:
 ```bash
 docker compose up -d
 ```
 
-> Se você é uma pessoa como eu que adora acompanhar o passo de cada informação nos logs, é possível utilizar o comando `docker compose logs -f`.
+> Se você é uma pessoa como eu que adora acompanhar o passo a passo de cada informação nos logs, é possível utilizar o comando `docker compose logs -f`.
 
 Para garantir que tudo está funcionando como devia, podemos realizar algumas verificações:
-- `docker compose ps`: para validar se os containers estão `healthy`
-- Acessar o endereço [http://localhost:3030/](http://localhost:3030/) para acessar a interface gráfica do Landoop para visualizar os tópicos, conectores e plugins de conectores.
+- `docker compose ps`: para validar se os containers estejam no estado `healthy`
+- Acesse o endereço [http://localhost:3030/](http://localhost:3030/) para acessar a interface gráfica do Landoop para visualizar os tópicos, conectores e plugins dos conectores instalados.
 - `curl --url http://localhost:8083/connector-plugins/`: listas os plugins de conectores disponíveis, verifique se o plugin com a class `com.nordstrom.kafka.connect.lambda.LambdaSinkConnector` está disponível.
 
 ### Criação da lambda
-Crie uma Lambda no Localstack utilizando Cloudformation:
+Crie uma Lambda no Localstack utilizando **Cloudformation** com seguinte comando:
 ```bash
 aws cloudformation create-stack \
 --stack-name example-lambda-stack \
@@ -206,19 +204,19 @@ aws cloudformation create-stack \
 --endpoint-url http://localhost:4566
 ```
 
-Se a stack com a Lambda e demais dependencias for criada com sucesso, você deve ver uma saída semelhante ao exemplo abaixo:
+Se a stack for criada com sucesso, a saída será semelhante a esta:
 ```bash
 {
     "StackId": "arn:aws:cloudformation:us-east-1:000000000000:stack/example-lambda-stack/d61cbd21"
 }
 ```
 
-Para verificar se a Lambda foi criada com sucesso, execute o seguinte comando:
+Para verificar se a Lambda foi criada corretamente, execute:
 ```bash
 aws lambda list-functions --endpoint-url=http://localhost:4566
 ```
 
-Se tudo ocorreu como esperado, você deve ver uma saída semelhante ao exemplo abaixo:
+A saída esperada será semelhante ao exemplo abaixo:
 ```json
 {
     "Functions": [
@@ -255,80 +253,82 @@ Se tudo ocorreu como esperado, você deve ver uma saída semelhante ao exemplo a
 }
 ```
 
-Agora antes de irmos ao próximo passo, vamos fazer um teste em nossa Lambda:
+Para testar a Lambda, use o seguinte comando:
 ```bash
 aws lambda invoke --function-name example-function \
 --cli-binary-format raw-in-base64-out \
 --payload '{"value": "my example"}' --output text result.txt \
 --endpoint-url http://localhost:4566
 ```
-Se tudo ocorreu bem você deve receber a seguinte resposta:
+
+Se tudo ocorreu bem, você deve receber a seguinte resposta:
 ```bash
 $LATEST Unhandled       200
 ```
-Ou podemos validar o conteúdo do arquivo result.txt:
-```bash
-cat result.txt
-# {"value": "my example"}
-```
 
 ### Criação do conector
-A criação do conector Lambda Sink é realizada via [API Kafka Connect REST](https://docs.confluent.io/platform/current/connect/references/restapi.html) ou na interface gráfica do [Landoop](http://localhost:3030/). Aqui estaremos utilizando o curl para realizar as requisições, mas nada impede de criar as requisições utilizando um aplicativo como o [Insomnia](https://insomnia.rest/download) ou outro:
+A criação do conector Lambda Sink pode ser feita via [API Kafka Connect REST](https://docs.confluent.io/platform/current/connect/references/restapi.html) ou pela interface gráfica do [Landoop](http://localhost:3030/). Neste exemplo, utilizaremos o `curl` para enviar as requisições, mas você também pode usar ferramentas como o [Insomnia](https://insomnia.rest/download) ou similares.
+
 ```bash
 curl -XPOST -H "Content-Type: application/json" \
 http://localhost:8083/connectors \
 -d @connector-localstack.json
 ```
+> Dica: No Insomnia, você pode importar comandos **curl** para gerar a requisição automaticamente. Confira este [vídeo tutorial](ttps://www.youtube.com/watch?v=wGzQrWcUcjc) ou consulte a [documentação oficial](https://docs.insomnia.rest/insomnia/import-export-data#import-data) para mais detalhes.
 
 Você deve receber a seguinte resposta:
 ```json
 {
-	"name": "example-lambda-connector-localstack",
-	"config": {
-		"tasks.max": "1",
-		"connector.class": "com.nordstrom.kafka.connect.lambda.LambdaSinkConnector",
-		"topics": "example-stream",
-		"key.converter": "org.apache.kafka.connect.storage.StringConverter",
-		"value.converter": "org.apache.kafka.connect.storage.StringConverter",
-		"aws.region": "us-east-1",
-		"aws.lambda.function.arn": "arn:aws:lambda:us-east-1:000000000000:function:example-function",
-		"aws.lambda.invocation.timeout.ms": "60000",
-		"aws.lambda.invocation.mode": "SYNC",
-		"aws.lambda.batch.enabled": "false",
-		"localstack.enabled": "true",
-		"name": "example-lambda-connector-localstack"
-	},
-	"tasks": [],
-	"type": "sink"
+  "name": "example-lambda-connector-localstack",
+  "config": {
+    "tasks.max": "1",
+    "connector.class": "com.nordstrom.kafka.connect.lambda.LambdaSinkConnector",
+    "topics": "example-stream",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "aws.region": "us-east-1",
+    "aws.lambda.function.arn": "arn:aws:lambda:us-east-1:000000000000:function:example-function",
+    "aws.lambda.invocation.timeout.ms": "60000",
+    "aws.lambda.invocation.mode": "SYNC",
+    "aws.lambda.batch.enabled": "false",
+    "localstack.enabled": "true",
+    "name": "example-lambda-connector-localstack"
+  },
+  "tasks": [],
+  "type": "sink"
 }
 ```
 
-Para validarmos o conector criado podemos realizar outra requisição HTTP usando curl para verificar o status do conector:
+Para validar o status do conector, execute o seguinte comando **curl**:
 ```bash
 curl --request GET \
   --url http://localhost:8083/connectors/example-lambda-connector-localstack/status 
 ```
+
 A resposta deve se algo como:
 ```json
 {
-	"name": "example-lambda-connector-localstack",
-	"connector": {
-		"state": "RUNNING",
-		"worker_id": "127.0.0.1:8083"
-	},
-	"tasks": [
-		{
-			"id": 0,
-			"state": "RUNNING",
-			"worker_id": "127.0.0.1:8083"
-		}
-	],
-	"type": "sink"
+  "name": "example-lambda-connector-localstack",
+  "connector": {
+    "state": "RUNNING",
+    "worker_id": "127.0.0.1:8083"
+  },
+  "tasks": [
+    {
+      "id": 0,
+      "state": "RUNNING",
+      "worker_id": "127.0.0.1:8083"
+    }
+  ],
+  "type": "sink"
 }
 ```
-> Obs.: podemos utilizar esse mesmo comando para identificar algum problema na integração do conector Kafka com a Lambda no Localstack.
+> **Observação:** Este comando também pode ser utilizado para diagnosticar problemas de integração entre o conector Kafka e a Lambda no Localstack.
 
 ## Enviar mensagem no kafka
+
+### Opção 1: Envio rápido de mensagem única
+Utilize o comando abaixo para enviar uma mensagem única ao Kafka de forma rápida:
 ```bash
 echo "teste" | docker compose exec -T fast-data-dev \
 kafka-console-producer \
@@ -337,7 +337,8 @@ kafka-console-producer \
 ```
 > Obs: em caso de problema de comunicação com o broker ou outro serviço utilize o comando: `nc -vz localhost <PORTA>`. Ex: `nc -vz localhost 9092`
 
-Caso você prefira manter um terminal ativo para estar enviando os eventos para o tópico Kafka, é possível utilizar o seguinte comando:
+### Opção 2: Envio contínuo de mensagens
+Se preferir manter um terminal ativo para enviar várias mensagens ao Kafka, utilize o seguinte comando:
 ```bash
 docker compose exec fast-data-dev \
 kafka-console-producer \
@@ -345,21 +346,24 @@ kafka-console-producer \
 --topic example-stream
 ```
 
-Se tudo der certo certo você deve estar vendo um `>` para inserir as suas mensagens ao tópico Kafka. Exemplos de mensagens:
+Após a execução, você verá o prompt >, onde poderá inserir várias mensagens ao tópico Kafka. Exemplo de mensagens:
 ```bash
 {"value": "my example"}
-```
-
-```bash
 {"value": "my example 2"}
 ```
 
-Para visualizar os logs de execução da Lambda no terminal:
+## Visualizar os logs
+Para visualizar os logs da execução da Lambda diretamente no terminal, siga os passos abaixo:
+
+1. Primeiro, obtenha o nome do grupo de logs da Lambda:
 ```bash
 LOG_GROUP=`aws logs describe-log-groups \
 --endpoint-url http://localhost:4566 \
 --query "logGroups[0].logGroupName" | sed 's/"//g'`
+```
 
+2. Depois, use o comando aws logs tail para seguir os logs em tempo real:
+```bash
 aws logs tail $LOG_GROUP --follow --endpoint-url http://localhost:4566
 ```
 
@@ -370,7 +374,9 @@ A resposta esperada é algo semelhante ao exempĺo abaixo:
 2024-09-15T18:27:34.917000+00:00 2024/09/15/[$LATEST]57661289d19ebedfe4a6782395866989 END RequestId: 61ab5b4f-569a-4348-905b-b15ceadfcc26
 2024-09-15T18:27:34.932000+00:00 2024/09/15/[$LATEST]57661289d19ebedfe4a6782395866989 REPORT RequestId: 61ab5b4f-569a-4348-905b-b15ceadfcc26	Duration: 7.85 ms	Billed Duration: 8 msMemory Size: 128 MB	Max Memory Used: 128 MB
 ```
-> Obs.: Não se esqueça que também podemos ver os logs de execução da Lambda na [interface gráfica do Localstack](https://app.localstack.cloud/inst/default/resources).
+
+> **Observação:** ambém é possível visualizar os logs da Lambda diretamente na [interface gráfica do Localstack](https://app.localstack.cloud/inst/default/resources).
+
 
 ## Alguns erros e soluções para identificarmos os problemas
 - Function not found: arn:aws:lambda:us-east-1:000000000000:function:example-function : arn da lambda diferente do criado no localsctack. Sua lambda pode ter sido criada numa região diferente.
