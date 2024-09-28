@@ -1,3 +1,5 @@
 .vscode/*
 dev.to/2024-09-01-conector-lambda-sink-localstack/volume/*
 dev.to/2024-09-01-conector-lambda-sink-localstack/result.txt
+dev.to/2024-09-01-conector-lambda-sink-localstack/automation/plugins/*
+dev.to/2024-09-01-conector-lambda-sink-localstack/automation/volume/*

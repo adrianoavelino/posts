@@ -274,7 +274,7 @@ curl -XPOST -H "Content-Type: application/json" \
 http://localhost:8083/connectors \
 -d @connector-localstack.json
 ```
-> Dica: No Insomnia, você pode importar comandos **curl** para gerar a requisição automaticamente. Confira este [vídeo tutorial](ttps://www.youtube.com/watch?v=wGzQrWcUcjc) ou consulte a [documentação oficial](https://docs.insomnia.rest/insomnia/import-export-data#import-data) para mais detalhes.
+> Dica: No Insomnia, você pode importar comandos **curl** para gerar a requisição automaticamente. Confira este [vídeo tutorial](https://www.youtube.com/watch?v=wGzQrWcUcjc) ou consulte a [documentação oficial](https://docs.insomnia.rest/insomnia/import-export-data#import-data) para mais detalhes.
 
 Você deve receber a seguinte resposta:
 ```json
@@ -346,13 +346,13 @@ kafka-console-producer \
 --topic example-stream
 ```
 
-Após a execução, você verá o prompt >, onde poderá inserir várias mensagens ao tópico Kafka. Exemplo de mensagens:
+Após a execução, você verá o prompt `>`, onde poderá inserir várias mensagens ao tópico Kafka. Exemplo de mensagens:
 ```bash
 {"value": "my example"}
 {"value": "my example 2"}
 ```
 
-## Visualizar os logs
+## Como visualizar os logs da Lambda no terminal
 Para visualizar os logs da execução da Lambda diretamente no terminal, siga os passos abaixo:
 
 1. Primeiro, obtenha o nome do grupo de logs da Lambda:
@@ -375,8 +375,50 @@ A resposta esperada é algo semelhante ao exempĺo abaixo:
 2024-09-15T18:27:34.932000+00:00 2024/09/15/[$LATEST]57661289d19ebedfe4a6782395866989 REPORT RequestId: 61ab5b4f-569a-4348-905b-b15ceadfcc26	Duration: 7.85 ms	Billed Duration: 8 msMemory Size: 128 MB	Max Memory Used: 128 MB
 ```
 
-> **Observação:** ambém é possível visualizar os logs da Lambda diretamente na [interface gráfica do Localstack](https://app.localstack.cloud/inst/default/resources).
+> **Observação:** também é possível visualizar os logs da Lambda diretamente na [interface gráfica do Localstack](https://app.localstack.cloud/inst/default/resources).
 
+## Automatização
+Parabéns! Se você chegou até aqui, já percorreu um longo caminho e fez tudo manualmente  ou ... você foi uma pessoa "espertinha" e encontrou um atalho aqui para chegar no parque de diversão.
+
+Aqui não vamos precisar criar os arquivos de configuração e nem a criação da infraestrutura de forma manual, tudo está automatizado. Seguindo os passo abaixo você terá o ambiente completo configurado para enviar mensagens ao tópico Kafka e validar os logs. Vamos a prática:
+
+Clone o repositório:
+```bash
+git clone https://github.com/adrianoavelino/posts.git
+```
+
+Entre no diretório `automation`:
+```bash
+cd dev.to/2024-09-01-conector-lambda-sink-localstack/automation/
+```
+
+Inicie os containers:
+```bash
+docker compose up
+```
+
+Agora é só aguardar a inicialização e criação da lambda e conector Lambda Sink para inicar os testes. Se rodou ocorreu como planejado você deve ver algo paracedo com o exemplo abaixo:
+```bash
+localstack-main  | ########### script 02 - Lambda function has been invoked ###########
+fast-data-dev-1  | Sat 28 Sep 2024 02:15:31 AM UTC  Kafka Connect listener HTTP state:  000  (waiting for 200)
+fast-data-dev-1  | Sat 28 Sep 2024 02:15:36 AM UTC  Kafka Connect listener HTTP state:  000  (waiting for 200)
+fast-data-dev-1  | Sat 28 Sep 2024 02:15:41 AM UTC  Kafka Connect listener HTTP state:  000  (waiting for 200)
+fast-data-dev-1  | Sat 28 Sep 2024 02:15:47 AM UTC  Kafka Connect listener HTTP state:  200  (waiting for 200)
+fast-data-dev-1  | 
+fast-data-dev-1  | --
+fast-data-dev-1  | +> Creating Lambda Sink Connector with avro
+fast-data-dev-1  | {"name":"example-lambda-connector-localstack","config":{"tasks.max":"1","connector.class":"com.nordstrom.kafka.connect.lambda.LambdaSinkConnector","topics":"example-stream","key.converter":"org.apache.kafka.connect.storage.StringConverter","value.converter":"org.apache.kafka.connect.storage.StringConverter","aws.region":"us-east-1","aws.lambda.function.arn":"arn:aws:lambda:us-east-1:000000000000:function:example-function","aws.lambda.invocation.timeout.ms":"60000","aws.lambda.invocation.mode":"SYNC","aws.lambda.batch.enabled":"false","localstack.enabled":"true","name":"example-lambda-connector-localstack"},"tasks":[],"type":"sink"}2024-09-28 02:15:53,267 INFO exited: logs-to-kafka (exit status 0; expected)
+```
+
+Execute o seguinte comando para enviar um envento ao tópico Kafka:
+```bash
+echo "teste" | docker compose exec -T fast-data-dev \
+kafka-console-producer \
+--broker-list localhost:9092 \
+--topic example-stream
+```
+
+Agora você pode começar a realizar seus testes e ajustar a configuração conforme necessário. Se encontrar algum problema, não se preocupe, basta verificar os logs dos containers para identificar possíveis erros. E deixa eu te contar mais um segredo, deixei várias dicas legais logo abaixo.
 
 ## Alguns erros e soluções para identificarmos os problemas
 - Function not found: arn:aws:lambda:us-east-1:000000000000:function:example-function : arn da lambda diferente do criado no localsctack. Sua lambda pode ter sido criada numa região diferente.

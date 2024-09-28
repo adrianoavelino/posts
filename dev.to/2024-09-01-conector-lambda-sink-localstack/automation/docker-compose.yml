@@ -1,0 +1,58 @@
+services:
+  fast-data-dev:
+    image: landoop/fast-data-dev:3.3
+    ports:
+      - "2181:2181"
+      - "3030:3030"
+      - "8081-8083:8081-8083"
+      - "9581-9585:9581-9585"
+      - "9092:9092"
+    environment:
+      ADV_HOST: 127.0.0.1
+      DEBUG: 1
+      RUNTESTS: 0
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+      CONNECT_PLUGIN_PATH: /var/run/connect/connectors/stream-reactor,/var/run/connect/connectors/third-party,/connectors
+    volumes:
+      - ../plugins:/connectors/kafka-connect-lambda-localstack
+      - ../connector-localstack.json:/connector-localstack.json
+    command: 
+      - bash 
+      - -c 
+      - |
+        echo "Starting fast-data-dev"
+        /usr/local/bin/setup-and-run.sh &
+
+        echo "Waiting for Kafka Connect to start listening on localhost ⏳"
+        while : ; do
+          curl_status=$$(curl -s -o /dev/null -w %{http_code} http://localhost:8083/connectors)
+          echo -e $$(date) " Kafka Connect listener HTTP state: " $$curl_status " (waiting for 200)"
+          if [ $$curl_status -eq 200 ] ; then
+            break
+          fi
+          sleep 5
+        done
+        echo -e "\n--\n+> Creating Lambda Sink Connector with avro"
+        curl -XPOST -H 'Content-Type: application/json' http://localhost:8083/connectors -d @/connector-localstack.json -s &
+        sleep infinity
+    depends_on: [localstack]
+    network_mode: host
+
+  localstack:
+    container_name: "${LOCALSTACK_DOCKER_NAME-localstack-main}"
+    image: localstack/localstack:2.3
+    ports:
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
+    environment:
+      - DEBUG=${DEBUG-}
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - LAMBDA_PATH=${PWD}/../app
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - ./init-scripts/:/etc/localstack/init/ready.d/
+      - ../cloudformation.yml:/opt/code/localstack/cloudformation.yml
+
+    network_mode: host
