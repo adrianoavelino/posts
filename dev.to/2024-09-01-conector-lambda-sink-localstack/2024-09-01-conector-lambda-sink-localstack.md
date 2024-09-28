@@ -420,41 +420,75 @@ kafka-console-producer \
 
 Agora você pode começar a realizar seus testes e ajustar a configuração conforme necessário. Se encontrar algum problema, não se preocupe, basta verificar os logs dos containers para identificar possíveis erros. E deixa eu te contar mais um segredo, deixei várias dicas legais logo abaixo.
 
-## Alguns erros e soluções para identificarmos os problemas
-A primeira dica é sempre [olhar os logs dos containers](https://docs.docker.com/reference/cli/docker/compose/logs/) para identificar algum comportamento ou mensagem de erro que possa dar uma ideia do problema. Ah, você pode visualizar os logs separados por serviços, como por exemplo, `docker compose logs -f localstack` ou `docker compose logs -f fast-data-dev`.
+## Erros e Soluções: Desvendando Problemas com Estilo
 
-No caso do serviço **fast-data-dev**, alguns logs não são exibidos com o comando acima. Você pode ver os logs no arquivo `/var/log/broker.log`, no container, usando o comando `docker compose exec fast-data-dev cat /var/log/broker.log`. Está e outras informações do **fast-data-dev** podem ser vistas no [Docker Hub](https://hub.docker.com/r/landoop/fast-data-dev).
+Vamos lá, todo mundo já passou por isso: algo dá errado e você fica ali, encarando a tela, tentando entender o que aconteceu. Mas calma, eu tô aqui pra te ajudar a resolver esses pepinos! 😎
 
+### 1. Logs: Seus Melhores Amigos
 
-**Function not found arn:aws:lambda:us-east-1:000000000000:function:example-function**: arn da lambda diferente do criado no localstack. Sua lambda pode ter sido criada numa região diferente. Verifique o seu arquivo de configuração do aws-cli (`~/.aws/config`).
+Primeira dica de ouro: sempre dê uma olhada nos logs dos containers. Eles são tipo aquele amigo que te conta o que realmente está acontecendo por trás das cortinas. Você pode conferir os logs de cada serviço separadamente, assim:
 
-Erros no conector podem ser encontrados através da [api do Kafka Connect](https://docs.confluent.io/platform/current/connect/references/restapi.html#get--connectors-(string-name)-status) usando o seguinte comando:
+No LocalStack:
+```
+docker compose logs -f localstack
+```
+
+Ou no fast-data-dev:
+```
+docker compose logs -f fast-data-dev
+```
+
+Agora, se você estiver lidando com o **fast-data-dev** e não estiver vendo todos os logs, não se desespere! Basta rodar o seguinte comando pra dar uma espiada no arquivo de logs dentro do container:
+
+```bash
+docker compose exec fast-data-dev cat /var/log/broker.log
+```
+
+E se quiser saber mais sobre o fast-data-dev, dá uma olhada no Docker Hub. Eles têm tudo lá!
+
+### 2. Erro Clássico: "Function not found"
+
+Ah, o famoso erro "Function not found arn:aws:lambda:us-east-1:000000000000:function:example-function". Isso geralmente significa que a Lambda que você está tentando chamar não foi encontrada. Provavelmente, ela foi criada em outra região. Então, dá uma conferida no seu arquivo de configuração do AWS CLI (`~/.aws/config`) e veja se a região está certinha.
+
+### 3. Erros no Conector Kafka: Como Encontrar?
+
+Se o problema for no conector Kafka, você pode usar a [api do Kafka Connect](https://docs.confluent.io/platform/current/connect/references/restapi.html#get--connectors-(string-name)-status) pra descobrir o que tá rolando. Aqui vai o comando mágico:
+
 ```bash
 curl --request GET \
---url http://localhost:8083/connectors/example-lambda-connector-localstack/status \
---header 'User-Agent: insomnia/9.3.3'
+  --url http://localhost:8083/connectors/example-lambda-connector-localstack/status \
+  --header 'User-Agent: insomnia/9.3.3'
 ```
 
- Exemplo de erro quando não existe uma lambda function criada no localstack:
+#### Exemplo de Erro: Lambda Não Encontrada
+
+Se a Lambda não foi criada no Localstack, você vai ver algo assim:
+
 ```json
 {
-	"name": "example-lambda-connector-localstack",
-	"connector": {
-		"state": "RUNNING",
-		"worker_id": "127.0.0.1:8083"
-	},
-	"tasks": [
-		{
-			"id": 0,
-			"state": "FAILED",
-			"worker_id": "127.0.0.1:8083",
-			"trace": "org.apache.kafka.connect.errors.ConnectException: Exiting WorkerSinkTask due to unrecoverable exception.\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.deliverMessages(WorkerSinkTask.java:611)\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.poll(WorkerSinkTask.java:333)\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.iteration(WorkerSinkTask.java:234)\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.execute(WorkerSinkTask.java:203)\n\tat org.apache.kafka.connect.runtime.WorkerTask.doRun(WorkerTask.java:189)\n\tat org.apache.kafka.connect.runtime.WorkerTask.run(WorkerTask.java:244)\n\tat java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)\n\tat java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)\n\tat java.base/java.lang.Thread.run(Thread.java:829)\nCaused by: com.nordstrom.kafka.connect.lambda.InvocationClient$InvocationException: java.util.concurrent.ExecutionException: com.amazonaws.services.lambda.model.ResourceNotFoundException: Function not found: arn:aws:lambda:us-east-1:000000000000:function:example-function (Service: AWSLambda; Status Code: 404; Error Code: ResourceNotFoundException; Request ID: 52512fac-927b-4db0-a910-907270c4166f; Proxy: null)\n\tat com.nordstrom.kafka.connect.lambda.InvocationClient.invoke(InvocationClient.java:71)\n\tat com.nordstrom.kafka.connect.lambda.LambdaSinkTask.invoke(LambdaSinkTask.java:190)\n\tat com.nordstrom.kafka.connect.lambda.LambdaSinkTask.put(LambdaSinkTask.java:86)\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.deliverMessages(WorkerSinkTask.java:581)\n\t... 10 more\nCaused by: java.util.concurrent.ExecutionException: com.amazonaws.services.lambda.model.ResourceNotFoundException: Function not found: arn:aws:lambda:us-east-1:000000000000:function:example-function (Service: AWSLambda; Status Code: 404; Error Code: ResourceNotFoundException; Request ID: 52512fac-927b-4db0-a910-907270c4166f; Proxy: null)\n\tat java.base/java.util.concurrent.FutureTask.report(FutureTask.java:122)\n\tat java.base/java.util.concurrent.FutureTask.get(FutureTask.java:205)\n\tat com.nordstrom.kafka.connect.lambda.InvocationClient.invoke(InvocationClient.java:64)\n\t... 13 more\nCaused by: com.amazonaws.services.lambda.model.ResourceNotFoundException: Function not found: arn:aws:lambda:us-east-1:000000000000:function:example-function (Service: AWSLambda; Status Code: 404; Error Code: ResourceNotFoundException; Request ID: 52512fac-927b-4db0-a910-907270c4166f; Proxy: null)\n\tat com.amazonaws.http.AmazonHttpClient$RequestExecutor.handleErrorResponse(AmazonHttpClient.java:1819)\n\tat com.amazonaws.http.AmazonHttpClient$RequestExecutor.handleServiceErrorResponse(AmazonHttpClient.java:1403)\n\tat com.amazonaws.http.AmazonHttpClient$RequestExecutor.executeOneRequest(AmazonHttpClient.java:1372)\n\tat com.amazonaws.http.AmazonHttpClient$RequestExecutor.executeHelper(AmazonHttpClient.java:1145)\n\tat com.amazonaws.http.AmazonHttpClient$RequestExecutor.doExecute(AmazonHttpClient.java:802)\n\tat com.amazonaws.http.AmazonHttpClient$RequestExecutor.executeWithTimer(AmazonHttpClient.java:770)\n\tat com.amazonaws.http.AmazonHttpClient$RequestExecutor.execute(AmazonHttpClient.java:744)\n\tat com.amazonaws.http.AmazonHttpClient$RequestExecutor.access$500(AmazonHttpClient.java:704)\n\tat com.amazonaws.http.AmazonHttpClient$RequestExecutionBuilderImpl.execute(AmazonHttpClient.java:686)\n\tat com.amazonaws.http.AmazonHttpClient.execute(AmazonHttpClient.java:550)\n\tat com.amazonaws.http.AmazonHttpClient.execute(AmazonHttpClient.java:530)\n\tat com.amazonaws.services.lambda.AWSLambdaClient.doInvoke(AWSLambdaClient.java:4717)\n\tat com.amazonaws.services.lambda.AWSLambdaClient.invoke(AWSLambdaClient.java:4684)\n\tat com.amazonaws.services.lambda.AWSLambdaClient.invoke(AWSLambdaClient.java:4673)\n\tat com.amazonaws.services.lambda.AWSLambdaClient.executeInvoke(AWSLambdaClient.java:2619)\n\tat com.amazonaws.services.lambda.AWSLambdaAsyncClient$30.call(AWSLambdaAsyncClient.java:1248)\n\tat com.amazonaws.services.lambda.AWSLambdaAsyncClient$30.call(AWSLambdaAsyncClient.java:1242)\n\t... 4 more\n"
-		}
-	],
-	"type": "sink"
+  "name": "example-lambda-connector-localstack",
+  "connector": {
+    "state": "RUNNING",
+    "worker_id": "127.0.0.1:8083"
+  },
+  "tasks": [
+    {
+      "id": 0,
+      "state": "FAILED",
+      "worker_id": "127.0.0.1:8083",
+      "trace": "org.apache.kafka.connect.errors.ConnectException: Exiting WorkerSinkTask due to unrecoverable exception.\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.deliverMessages(WorkerSinkTask.java:611)\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.poll(WorkerSinkTask.java:333)\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.iteration(WorkerSinkTask.java:234)\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.execute(WorkerSinkTask.java:203)\n\tat org.apache.kafka.connect.runtime.WorkerTask.doRun(WorkerTask.java:189)\n\tat org.apache.kafka.connect.runtime.WorkerTask.run(WorkerTask.java:244)\n\tat java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)\n\tat java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)\n\tat java.base/java.lang.Thread.run(Thread.java:829)\nCaused by: com.nordstrom.kafka.connect.lambda.InvocationClient$InvocationException: java.util.concurrent.ExecutionException: com.amazonaws.services.lambda.model.ResourceNotFoundException: Function not found: arn:aws:lambda:us-east-1:000000000000:function:example-function (Service: AWSLambda; Status Code: 404; Error Code: ResourceNotFoundException; Request ID: 52512fac-927b-4db0-a910-907270c4166f; Proxy: null)\n\tat com.nordstrom.kafka.connect.lambda.InvocationClient.invoke(InvocationClient.java:71)\n\tat com.nordstrom.kafka.connect.lambda.LambdaSinkTask.invoke(LambdaSinkTask.java:190)\n\tat com.nordstrom.kafka.connect.lambda.LambdaSinkTask.put(LambdaSinkTask.java:86)\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.deliverMessages(WorkerSinkTask.java:581)\n\t... 10 more\n"
+    }
+  ],
+  "type": "sink"
 }
 ```
-> Não se esqueça, existe uma [interface gráfica do fast-data-dev]() para aqueles que gostam de algo visual.
+
+### 4. Interface Gráfica: Porque Nem Todo Mundo Gosta de Linha de Comando
+
+Se você é do tipo que prefere ver as coisas de forma visual (e quem não gosta, né?), o fast-data-dev tem uma [interface gráfica](http://localhost:3030/kafka-connect-ui/#/cluster/fast-data-dev/connector/example-lambda-connector-localstack) bem bacana pra você acompanhar tudo que está rolando com seus conectores e tópicos do Kafka.
+
+Pronto! Agora você já sabe como lidar com esses erros chatos e seguir em frente com seu projeto. E lembre-se: os logs são seus amigos, e a interface gráfica tá aí pra te ajudar quando a linha de comando não for suficiente. 🚀
+
 
 
 ## Links
