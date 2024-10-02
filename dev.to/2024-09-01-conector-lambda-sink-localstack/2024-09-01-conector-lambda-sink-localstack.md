@@ -489,6 +489,21 @@ Se você é do tipo que prefere ver as coisas de forma visual (e quem não gosta
 
 Pronto! Agora você já sabe como lidar com esses erros chatos e seguir em frente com seu projeto. E lembre-se: os logs são seus amigos, e a interface gráfica tá aí pra te ajudar quando a linha de comando não for suficiente. 🚀
 
+## Dicas e recomendações
+No  nosso passo a passo colocamos o código fonte da lamda dentro do template do cloudformation porque é um exemplo super simples, mas podemmos criar uma Lambda com diversas dependências usando o terraform ou serverless, ambos utilizando o Localstack.
+
+Te um exemplo super legal no [Youtube do Localstack](https://www.youtube.com/watch?v=DFS3CnB-Z0k) ensinando como criar uma Lambda com hot reload, ou seja, não precisamos empacotar todo o código fonte e dependência a cada alteração do código fonte para testarmos a execução da Lambda usando Localstack. Tô deixando aqui o [repositório  no Github](https://github.com/localstack-samples/localstack-pro-samples/tree/master/lambda-hot-reloading/javascript-terraform) utilizado no vídeo e um [exemplo de uso](https://github.com/my-study-area/poc-kafka-connector-lambda) que realizei alguns testes utilizano uma lambda com a utilização de conversor de Avro (no nosso guia foi utilizado o conversor de string).
+
+Outra forma de acelerarmos a criação de Lambda é utilizando o [Serverless](https://www.serverless.com/), com ele conseguimos realizar a implantação de aplicações serverless de forma simplificada. Para isso deixaremos um [repositorio no Github com exemplos de uso com Localstack](https://github.com/my-study-area/estudo-serverless-framework) com Nodejs e Python.
+
+
+Para produzir mensagens no tópico Kafka via linha de comando temos como exemplo o [kcat](https://github.com/edenhill/kcat). De forma visual podemos utilizar o [JMeter](https://jmeter.apache.org/) com o [plugin Kafka](https://github.com/rollno748/di-kafkameter).
+![Tela da interface gráfica do JMeter com um plugin producer Kafka enviando diversas mensagens a um tópico Kafka](./images/tela-jmeter-plugin-di-kafkameter-com-producer.png)
+_Tela da interface gráfica do JMeter com um plugin producer Kafka enviando diversas mensagens a um tópico Kafka._
+
+Pra facilitar, vou deixar um passo a passo de instalação manual para Linux no [Stackoverflow](https://stackoverflow.com/a/54181626/6415045) e outro no Windows num vídeo do [Youtube](https://www.youtube.com/watch?v=SP9H7Xc3oU8&list=PLPHt--SznmcAAankcwYa5Pdn3t1qAl8Cp&index=1). Para instalar o plugin Kafka, vamos utilizar o [plugin manager](https://www.youtube.com/watch?v=SP9H7Xc3oU8&list=PLPHt--SznmcAAankcwYa5Pdn3t1qAl8Cp&index=1) para facilitar o processo de instalação do [plugin do Kafka](https://www.youtube.com/watch?v=RXFDrk0LxpU&list=PLPHt--SznmcAAankcwYa5Pdn3t1qAl8Cp&index=61). Ah, antes que eu esqueça, vou deixar um [arquivo de configuração](./jmeter-producer-kafka.jmx) do plugin no Jmeter para facilitar.
+
+Se você estiver atrás de um desafio maior, pode usar o conector data source como o [Voluble](https://github.com/MichaelDrogalis/voluble). Com ele você gerar diversos eventos ao tópíco de forma automática, veja um exemplo de uso no vídeo [🎄 Twelve Days of SMT 🎄 - Day 1: InsertField (timestamp)](https://youtu.be/3Gj_SoyuTYk?si=H7YCHqTsz4bRHpUi&t=105) e [algumas anotações](https://github.com/my-study-area/estudo-kafka-connect?tab=readme-ov-file#twelve-days-of-smt----day-1-insertfield-timestamp) para te  auxiliar na prática.
 
 
 ## Links
