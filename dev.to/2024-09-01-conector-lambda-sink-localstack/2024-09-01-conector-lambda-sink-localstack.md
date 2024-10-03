@@ -507,3 +507,12 @@ Se você estiver atrás de um desafio maior, pode usar o conector data source co
 
 
 ## Links
+- [Ferramenta para criar Diagrama](https://app.diagrams.net/)
+- [JMeter](https://jmeter.apache.org/) 
+- [Plugin DI KafkaMeter](https://github.com/rollno748/di-kafkameter).
+- [Instalação do AWS CLI](https://docs.aws.amazon.com/pt_br/cli/latest/userguide/getting-started-install.html)
+- [Localstack](https://www.localstack.cloud/)
+- [kafka-connect-lambda](https://github.com/Nordstrom/kafka-connect-lambda)
+- [Serverless](https://www.serverless.com/)
+- [tflocal: ferramenta para trabalhar com terraform no Localstack](https://github.com/localstack/terraform-local)
+- [api do Kafka Connect](https://docs.confluent.io/platform/current/connect/references/restapi.html#get--connectors-(string-name)-status)
