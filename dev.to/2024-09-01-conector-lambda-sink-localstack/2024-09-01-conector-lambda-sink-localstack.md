@@ -59,6 +59,8 @@ Para simplificar, neste tutorial, utilizaremos o `kafka-console-producer`.
 _Tela do terminal executando Kafka Console Producer na linha de comando_
 
 ## Criação dos arquivos de configuração
+Antes de tudo começar a funcionar, é necessário criarmos os arquivos de configuração da infraestrutura do Kafka, Lambda e conector Lambda Sink. Vamos começar configurando o **Docker Compose** para orquestrar Kafka e LocalStack, seguido do **CloudFormation** para provisionar a função Lambda no Localstack. Em seguida, definimos o **conector Kafka** e baixamos o **plugin Lambda Sink**. Por fim, verificamos a **estrutura final do projeto**, listando os arquivos criados para garantir que estão no local correto e prontos para execução. Vamos nessa!
+
 ### Docker Compose
 Começaremos criando o arquivo **docker-compose.yml**, que será responsável por orquestrar os containers do Kafka e do Localstack. Ele define os serviços necessários, como o Kafka (com a imagem **fast-data-dev**) e o Localstack para emular a AWS. Crie o arquivo `./docker-compose.yml` com o seguinte conteúdo:
 
@@ -181,6 +183,12 @@ Ao finalizar esta etapa, a estrutura de arquivos do projeto deverá ser semelhan
 ```
 
 ## Criação da infrastrutura
+Para que nossa aplicação comece a funcionar, precisamos preparar o terreno: vamos criar a infraestrutura que dará vida ao Kafka, à Lambda e ao conector Lambda Sink.
+
+Iniciaremos com a inicialização dos containers. Em seguida, provisionaremos a função Lambda usando o **CloudFormation**. Depois, criaremos o **conector Kafka**.
+
+Por fim, vamos conferir se tudo foi criado corretamente. Preparados? Então, vamos lá!
+
 ### Inicialização dos containers
 Inicie os containers do Kafka e do Localstack com o seguinte comando:
 ```bash
@@ -326,6 +334,7 @@ A resposta deve se algo como:
 > **Observação:** Este comando também pode ser utilizado para diagnosticar problemas de integração entre o conector Kafka e a Lambda no Localstack.
 
 ## Enviar mensagem no kafka
+Agora que tudo está configurado e em execução, é hora de fazer o Kafka funcionar de verdade! Vamos aprender a enviar mensagens para o tópico que criamos. Neste momento, vamos explorar duas opções para enviar mensagens: uma forma rápida e direta para quem precisa de agilidade e outra que permite o envio contínuo de múltiplas mensagens. Com essas opções, você poderá interagir facilmente com o Kafka e começar a testar a comunicação entre os componentes da sua aplicação. Vamos lá!
 
 ### Opção 1: Envio rápido de mensagem única
 Utilize o comando abaixo para enviar uma mensagem única ao Kafka de forma rápida:
@@ -397,7 +406,7 @@ Inicie os containers:
 docker compose up
 ```
 
-Agora é só aguardar a inicialização e criação da lambda e conector Lambda Sink para inicar os testes. Se rodou ocorreu como planejado você deve ver algo paracedo com o exemplo abaixo:
+Agora é só aguardar a inicialização e criação da lambda e conector Lambda Sink para inicar os testes. Se o procorreu como planejado, você deve ver algo parecido com o exemplo abaixo:
 ```bash
 localstack-main  | ########### script 02 - Lambda function has been invoked ###########
 fast-data-dev-1  | Sat 28 Sep 2024 02:15:31 AM UTC  Kafka Connect listener HTTP state:  000  (waiting for 200)
@@ -410,7 +419,7 @@ fast-data-dev-1  | +> Creating Lambda Sink Connector with avro
 fast-data-dev-1  | {"name":"example-lambda-connector-localstack","config":{"tasks.max":"1","connector.class":"com.nordstrom.kafka.connect.lambda.LambdaSinkConnector","topics":"example-stream","key.converter":"org.apache.kafka.connect.storage.StringConverter","value.converter":"org.apache.kafka.connect.storage.StringConverter","aws.region":"us-east-1","aws.lambda.function.arn":"arn:aws:lambda:us-east-1:000000000000:function:example-function","aws.lambda.invocation.timeout.ms":"60000","aws.lambda.invocation.mode":"SYNC","aws.lambda.batch.enabled":"false","localstack.enabled":"true","name":"example-lambda-connector-localstack"},"tasks":[],"type":"sink"}2024-09-28 02:15:53,267 INFO exited: logs-to-kafka (exit status 0; expected)
 ```
 
-Execute o seguinte comando para enviar um envento ao tópico Kafka:
+Execute o seguinte comando para enviar um evento ao tópico Kafka:
 ```bash
 echo "teste" | docker compose exec -T fast-data-dev \
 kafka-console-producer \
