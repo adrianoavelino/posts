@@ -166,7 +166,7 @@ Agora, crie o arquivo de configuração do **conector Lambda Sink**. Este arquiv
 ### Download do plugin Lambda Sink
 Por fim, faça o **download do plugin Lambda Sink** e salve-o no diretório `./plugins`. Execute o seguinte comando no terminal:
 ```bash
-curl -L -o ./plugins/kafka-connect-lambda-localstack-1.4.0.jar \
+mkdir ./plugins & curl -L -o ./plugins/kafka-connect-lambda-localstack-1.4.0.jar \
 https://github.com/adrianoavelino/kafka-connect-lambda-localstack/releases/download/v1.4.0/kafka-connect-lambda-localstack-1.4.0.jar
 ```
 > A última versão do plugin é a [1.4.0](https://github.com/adrianoavelino/kafka-connect-lambda-localstack/releases/tag/v1.4.0). Para versões mais recentes, consulte as [releases no GitHub](https://github.com/adrianoavelino/kafka-connect-lambda-localstack/releases).
