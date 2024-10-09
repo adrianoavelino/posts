@@ -2,7 +2,7 @@
 title: Conector Kafka Lambda Sink com Localstack
 published: false
 description: 
-tags: 
+tags: kafka, connect, conector, sink
 # cover_image: https://direct_url_to_image.jpg
 # Use a ratio of 100:42 for best results.
 # published_at: 2024-09-01 21:51 +0000
