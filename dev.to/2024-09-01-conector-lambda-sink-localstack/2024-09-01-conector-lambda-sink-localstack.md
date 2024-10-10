@@ -458,7 +458,7 @@ Agora, se você estiver lidando com o **fast-data-dev** e não estiver vendo tod
 docker compose exec fast-data-dev cat /var/log/broker.log
 ```
 
-E se quiser saber mais sobre o fast-data-dev, dá uma olhada no Docker Hub. Eles têm tudo lá!
+E se quiser saber mais sobre o fast-data-dev, dá uma olhada no [Docker Hub](https://hub.docker.com/r/landoop/fast-data-dev). Eles têm tudo lá!
 
 ### 2. Erro Clássico: "Function not found"
 
