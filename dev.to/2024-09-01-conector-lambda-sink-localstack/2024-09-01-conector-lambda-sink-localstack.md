@@ -401,6 +401,11 @@ Entre no diretório `automation`:
 cd posts/dev.to/2024-09-01-conector-lambda-sink-localstack/automation/
 ```
 
+Adicione a permissão de execução nos arquivos de scrips:
+```bash
+chmod +x init-scripts/*.sh
+```
+
 Inicie os containers:
 ```bash
 docker compose up
