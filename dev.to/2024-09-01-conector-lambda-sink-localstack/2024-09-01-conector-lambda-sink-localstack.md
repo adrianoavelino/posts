@@ -470,8 +470,7 @@ Se o problema for no conector Kafka, você pode usar a [api do Kafka Connect](ht
 
 ```bash
 curl --request GET \
-  --url http://localhost:8083/connectors/example-lambda-connector-localstack/status \
-  --header 'User-Agent: insomnia/9.3.3'
+  --url http://localhost:8083/connectors/example-lambda-connector-localstack/status
 ```
 
 #### Exemplo de Erro: Lambda Não Encontrada
