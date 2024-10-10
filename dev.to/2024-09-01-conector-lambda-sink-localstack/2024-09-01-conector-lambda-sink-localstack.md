@@ -398,7 +398,7 @@ git clone https://github.com/adrianoavelino/posts.git
 
 Entre no diretório `automation`:
 ```bash
-cd dev.to/2024-09-01-conector-lambda-sink-localstack/automation/
+cd posts/dev.to/2024-09-01-conector-lambda-sink-localstack/automation/
 ```
 
 Inicie os containers:
