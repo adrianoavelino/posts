@@ -33,7 +33,7 @@ services:
           fi
           sleep 5
         done
-        echo -e "\n--\n+> Creating Lambda Sink Connector with avro"
+        echo -e "\n--\n+> Creating Lambda Sink Connector"
         curl -XPOST -H 'Content-Type: application/json' http://localhost:8083/connectors -d @/connector-localstack.json -s &
         sleep infinity
     depends_on: [localstack]

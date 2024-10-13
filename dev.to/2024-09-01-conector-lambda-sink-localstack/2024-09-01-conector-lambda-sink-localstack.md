@@ -420,7 +420,7 @@ fast-data-dev-1  | Sat 28 Sep 2024 02:15:41 AM UTC  Kafka Connect listener HTTP 
 fast-data-dev-1  | Sat 28 Sep 2024 02:15:47 AM UTC  Kafka Connect listener HTTP state:  200  (waiting for 200)
 fast-data-dev-1  | 
 fast-data-dev-1  | --
-fast-data-dev-1  | +> Creating Lambda Sink Connector with avro
+fast-data-dev-1  | +> Creating Lambda Sink Connector
 fast-data-dev-1  | {"name":"example-lambda-connector-localstack","config":{"tasks.max":"1","connector.class":"com.nordstrom.kafka.connect.lambda.LambdaSinkConnector","topics":"example-stream","key.converter":"org.apache.kafka.connect.storage.StringConverter","value.converter":"org.apache.kafka.connect.storage.StringConverter","aws.region":"us-east-1","aws.lambda.function.arn":"arn:aws:lambda:us-east-1:000000000000:function:example-function","aws.lambda.invocation.timeout.ms":"60000","aws.lambda.invocation.mode":"SYNC","aws.lambda.batch.enabled":"false","localstack.enabled":"true","name":"example-lambda-connector-localstack"},"tasks":[],"type":"sink"}2024-09-28 02:15:53,267 INFO exited: logs-to-kafka (exit status 0; expected)
 ```
 
