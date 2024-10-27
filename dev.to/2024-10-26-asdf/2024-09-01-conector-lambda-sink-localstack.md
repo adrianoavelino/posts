@@ -1,5 +1,14 @@
 # ASDF
-Quando falamos de gerenciador de versão de dependências no ambiente Ruby temos o [rbenv](https://github.com/rbenv/rbenv), no Javascript temos o [nvm](https://github.com/nvm-sh/nvm), no Java o [sdkman](https://sdkman.io/).
+Quando falamos de gerenciador de versão de dependências no ambiente Ruby temos o [rbenv](https://github.com/rbenv/rbenv), no Javascript temos o [nvm](https://github.com/nvm-sh/nvm), no Java o [sdkman](https://sdkman.io/). No Python, [pyenv](https://github.com/pyenv/pyenv)
+
+Para ver um pouco mais sobre o asdf, recomendo o [vídeo The DEFINITIVE UBUNTU Guide for Beginning Devs
+do Akita no tempo 00:40:42](https://youtu.be/epiyExCyb2s?si=egUaKCaHHWySoShl&t=2440), onde ele também fala sobre o uso da ferramenta.
+
+Antes de começar, vamos falar um pouco sobre dois conceitos: os plugins e versões. De acordo com a documentação oficial: **Plugins** são como asdf sabe lidar com diferentes ferramentas, tais quais Node.js, Ruby, Elixir etc. AS versões são as próprias versões das dependências, como por exemplo, a versão **v20.18.0** do Nodejs.
+
+Com os plugins instalados, devemos definir qual versão queremos utilizar localmente ou globalmente. Isso mesmo, temos essa liberdade! Podemos utilizar a versão do python 3.6 globalmente e utilizar outra num outro repositório.
+
+Vamos ao que interessa, vamos a prática.
 
 ## Instalação do asdf
 ```bash
@@ -13,6 +22,10 @@ echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc
 source ~/.bashrc
 
 > Para outros tipos de shell como o zsh ou fish shell, [acesse a documentação oficial do asdf](https://asdf-vm.com/pt-br/guide/getting-started.html#_3-adicionando-ao-seu-shell).
+
+## Principais comandos
+
+
 
 ## Node
 https://github.com/asdf-vm/asdf-nodejs
@@ -125,5 +138,5 @@ apt-get update && apt-get install -y \
     libbz2-dev libreadline-dev libsqlite3-dev wget curl \
     llvm libncurses5-dev libncursesw5-dev \
     xz-utils tk-dev libffi-dev liblzma-dev \
-    git
+    git nano
 ```
