@@ -1,0 +1,7 @@
+services:
+  asdf:
+    build:
+      context: .  # Indica o diretório onde está o Dockerfile
+      dockerfile: Dockerfile
+    container_name: asdf
+    tty: true  # Mantém o terminal aberto
