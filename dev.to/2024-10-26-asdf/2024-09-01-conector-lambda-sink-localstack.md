@@ -40,9 +40,13 @@ source ~/.bashrc
 
 > Para outros tipos de shell como o zsh ou fish shell, [acesse a documentação oficial do asdf](https://asdf-vm.com/pt-br/guide/getting-started.html#_3-adicionando-ao-seu-shell).
 
-## Principais comandos
-
-
+## Principais Comandos do asdf
+- `asdf list`: Lista os plugins e versões instalados.
+- `asdf plugin add <NOME-DO-PLUGIN>`: Adiciona um plugin. Ex: _asdf plugin add python_
+- `asdf list all <NOME-DO-PLUGIN>`: Lista as versões disponíveis para o plugin. Ex: _asdf list all python_
+- `asdf install <NOME-DO-PLUGIN> <VERSAO>`: Instala uma versão para um plugin. Ex: _asdf install python 3.13.0_
+- `asdf global <NOME-DO-PLUGIN> <VERSAO>`: Configura uma versão do plugin como global. Ex: _asdf global python 3.13.0_
+- `asdf local <NOME-DO-PLUGIN> <VERSAO>`: Configura uma versão do plugin como local. Ex: _asdf local python 3.13.0_
 
 ## Node
 https://github.com/asdf-vm/asdf-nodejs
