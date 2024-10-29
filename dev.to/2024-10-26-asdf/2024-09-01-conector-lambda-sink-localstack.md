@@ -41,12 +41,36 @@ source ~/.bashrc
 > Para outros tipos de shell como o zsh ou fish shell, [acesse a documentação oficial do asdf](https://asdf-vm.com/pt-br/guide/getting-started.html#_3-adicionando-ao-seu-shell).
 
 ## Principais Comandos do asdf
-- `asdf list`: Lista os plugins e versões instalados.
-- `asdf plugin add <NOME-DO-PLUGIN>`: Adiciona um plugin. Ex: _asdf plugin add python_
-- `asdf list all <NOME-DO-PLUGIN>`: Lista as versões disponíveis para o plugin. Ex: _asdf list all python_
-- `asdf install <NOME-DO-PLUGIN> <VERSAO>`: Instala uma versão para um plugin. Ex: _asdf install python 3.13.0_
-- `asdf global <NOME-DO-PLUGIN> <VERSAO>`: Configura uma versão do plugin como global. Ex: _asdf global python 3.13.0_
-- `asdf local <NOME-DO-PLUGIN> <VERSAO>`: Configura uma versão do plugin como local. Ex: _asdf local python 3.13.0_
+Esses são os comandos essenciais para instalar, listar e gerenciar versões no **asdf**.
+
+- **`asdf list`**: Lista todos os plugins e as versões já instaladas no seu ambiente. Ideal para verificar rapidamente o que está disponível.
+
+- **`asdf plugin add <NOME-DO-PLUGIN>`**: Adiciona um plugin ao **asdf** para que ele gerencie uma nova linguagem ou ferramenta. Por exemplo, para adicionar o plugin do Python, digite:
+```bash
+asdf plugin add python
+```
+
+- **`asdf list all <NOME-DO-PLUGIN>`**: Lista todas as versões disponíveis para um plugin específico, permitindo que você escolha a que deseja instalar. Exemplo para ver as versões do Python:
+```bash
+asdf list all python
+```
+
+- **`asdf install <NOME-DO-PLUGIN> <VERSAO>`**: Instala uma versão específica de uma linguagem ou ferramenta. Para instalar a versão 3.13.0 do Python, por exemplo, use:
+```bash
+asdf install python 3.13.0
+```
+
+- **`asdf global <NOME-DO-PLUGIN> <VERSAO>`**: Define uma versão específica de uma linguagem ou ferramenta como padrão para todo o sistema. Para definir a versão 3.13.0 do Python como global, digite:
+```bash
+asdf global python 3.13.0
+```
+
+- **`asdf local <NOME-DO-PLUGIN> <VERSAO>`**: Define uma versão específica de uma linguagem ou ferramenta apenas para o diretório atual do projeto. Navegue até a pasta do projeto e execute o comando. Por exemplo:
+```bash
+asdf local python 3.13.0
+```
+> Observação: esse comando gerar um arquivo chamado `.tool-versions` na pasta do projeto.
+
 
 ## Node
 https://github.com/asdf-vm/asdf-nodejs
