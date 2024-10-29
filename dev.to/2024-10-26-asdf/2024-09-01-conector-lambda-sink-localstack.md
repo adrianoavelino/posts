@@ -22,15 +22,21 @@ De acordo com a [documentação oficial](https://asdf-vm.com/pt-br/manage/plugin
 Pronto para mergulhar no mundo do **asdf**? Então vamos à prática!
 
 ## Instalação do asdf
+Clone o respositorio para a sua pasta home:
 ```bash
 git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.1
 ```
 
-adicione no ~/.bashrc
+Execute os comandos abaixo para configurar o seu `~/.bashrc`:
+```bash
 echo '. "$HOME/.asdf/completions/asdf.bash"' >> ~/.bashrc
 echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc
+```
 
+Aplique as configurações no terminal ativo:
+```bash
 source ~/.bashrc
+```
 
 > Para outros tipos de shell como o zsh ou fish shell, [acesse a documentação oficial do asdf](https://asdf-vm.com/pt-br/guide/getting-started.html#_3-adicionando-ao-seu-shell).
 
