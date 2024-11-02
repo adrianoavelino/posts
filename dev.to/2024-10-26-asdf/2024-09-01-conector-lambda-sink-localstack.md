@@ -75,7 +75,7 @@ Agora que já conhecemos os comandos básicos, vamos turbinar o nosso ambiente c
 
 
 ## Guia Prático para Instalação de Plugins e Versões com o asdf
-Vamos instalar plugins e definir versões de linguagens e ferramentas populares com o **asdf**! A cada passo, você verá como configurar o ambiente para **Node.js**, **Java**, **Maven** e **Python** com comandos claros e diretos. 
+Vamos instalar plugins e definir versões de linguagens e ferramentas populares com o **asdf**! A cada passo, você verá como configurar o ambiente para **Node.js**, **Java**, **Maven** e **Python**. 
 
 ### 🚀 Começando com Node.js
 Para configurar o **Node.js** no seu ambiente, siga estes passos:
@@ -196,6 +196,11 @@ Esses passos são suficientes para instalar e configurar as linguagens e ferrame
 
 
 ## Links
+- [Documentação Oficial](https://asdf-vm.com/pt-br/)
+- [Plugin asdf para NodeJS](https://github.com/asdf-vm/asdf-nodejs)
+- [Plugin asdf para Java](https://github.com/halcyon/asdf-java)
+- [Plugin asdf para Maven](https://github.com/halcyon/asdf-maven)
+- [Plugin asdf para Python](https://github.com/asdf-community/asdf-python)
 
 latest version docker image: Ubuntu 24.04.1 LTS
 
