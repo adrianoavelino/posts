@@ -198,7 +198,7 @@ Esses passos são suficientes para instalar e configurar as linguagens e ferrame
 - Docker Compose
 
 ### Criando o ambiente
-Para fazermos o nosso laboratório com o asdf, já deixei tudo prontinho para você um ambiente configurado e instalado num container docker. Agora só basta você criar os seguintes arquivos:
+Para facilitar o laboratório com o asdf, preparamos um ambiente configurado e pronto para uso em um container Docker. Você só precisa criar os arquivos indicados abaixo:
 
 Arquivo `Dockerfile`:
 ```bash
@@ -243,8 +243,7 @@ services:
 ```
 
 ### Construindo e executando o container
-Com tudo pronto, agora é só executar o container com o seguinte comando:
-
+Com os arquivos prontos, execute o container com o comando abaixo:
 ```bash
 docker compose up -d --build
 ```
@@ -254,13 +253,12 @@ Onde:
 
 > 💡 Isso deve demorar um tempinho para instalar todas as dependências... ⏳ Aproveite para esticar as canelas e tomar uma água 💧!
 
-Assim que finalizar é só entrar no container:
+Após a instalação, acesse o container com o seguinte comando:
 ```bash
 docker compose exec asdf bash
 ```
 
-E agora volte no item **Guia Prático para Instalação de Plugins e Versões com o asdf**, logo acima para treinar os comando do asdf.
-
+Agora você está pronto para seguir com o tutorial no tópico Guia Prático para Instalação de Plugins e Versões com o asdf e testar os comandos do asdf!
 
 ## Links
 - [Documentação Oficial](https://asdf-vm.com/pt-br/)
