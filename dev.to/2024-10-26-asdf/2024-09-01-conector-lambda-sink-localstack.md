@@ -76,11 +76,12 @@ Agora que já conhecemos os comandos básicos, vamos turbinar o nosso ambiente c
 
 ## Guia Prático para Instalação de Plugins e Versões com o asdf
 Vamos instalar plugins e definir versões de linguagens e ferramentas populares com o **asdf**! A cada passo, você verá como configurar o ambiente para **Node.js**, **Java**, **Maven** e **Python**. 
+> Observação: se você gostaria de sentir o sabor da ferramenta antes de configurar o ambiente localmente você pode ir para o item **(Opcional) Laboratório**
 
 ### 🚀 Começando com Node.js
 Para configurar o **Node.js** no seu ambiente, siga estes passos:
 
-1. **Instalar dependências**: Vamos garantir que o sistema tenha tudo o que precisa.
+1. **Instalar dependências**: Vamos garantir que o sistema tenha todas as dependências que você precisa.
 ```bash
 sudo apt-get install dirmngr gpg curl gawk
 ```
@@ -99,11 +100,14 @@ Você deve ver algo assim:
 nodejs
   No versions installed
 ```
-4. **Instalar uma versão do Node.js**: Liste as versões disponíveis ou instale diretamente a mais recente:
+4. **Instalar uma versão do Node.js**:
+
+O primeiro passo antes de instalar uma versão, é escolher uma versão disponível e para isso liste as versões disponíveis:
 ```bash
 asdf list all nodejs
 ```
-Você deve uma lista semelhante ao exemplo abaixo:
+
+Você deve ver uma lista semelhante ao exemplo abaixo:
 ```
 ...
 22.11.0
@@ -111,7 +115,7 @@ Você deve uma lista semelhante ao exemplo abaixo:
 23.1.0
 ```
 
-Escolha uma das versões disponíveis e execute o comando abaixo para instalar:
+Escolha uma das versões disponíveis e execute o comando abaixo para instalar, por exemplo, a versão **23.0.0**:
 ```bash
 asdf install nodejs 23.0.0
 ```
@@ -122,7 +126,7 @@ asdf install nodejs 23.0.0
 asdf global nodejs 23.0.0
 ```
 
-> Não se esqueça, o próximo passo é opcional, mas para executar instale a versão **latest** com o comando `asdf install nodejs latest`
+> Não se esqueça, o próximo passo é opcional, mas para executar, instale a versão **latest** com o comando `asdf install nodejs latest`.
    - **Localmente** (apenas no diretório atual):
 ```bash
 asdf local nodejs latest # ou qualquer outra versão disponível
@@ -153,6 +157,7 @@ echo . ~/.asdf/plugins/java/set-java-home.bash >> ~/.bashrc
 ```bash
 asdf install java adoptopenjdk-8.0.432+6
 ```
+> Observação: você pode executar o comando `asdf list all java` para ver as versões disponíveis.
 
 5. **Verificar a versão do Java instalada**:
 ```bash
@@ -211,14 +216,16 @@ asdf install python latest
 asdf global python latest
 ```
 
-5. **Verifique a versão so python**:
+5. **Verifique a versão do python**:
 ```bash
 python --version
 ```
 
 Esses passos são suficientes para instalar e configurar as linguagens e ferramentas essenciais no **asdf**. Com essas instruções, seu ambiente estará preparado para alternar entre versões específicas conforme necessário.
 
-## Dicas
+## (Opcional) Laboratório
+Se você está aqui é porque você ficou interessado em testar o asdf antes de configurar em sua máquina. Sendo assim, vamos lá!
+
 ### Pré-requisitos:
 - Docker
 - Docker Compose
