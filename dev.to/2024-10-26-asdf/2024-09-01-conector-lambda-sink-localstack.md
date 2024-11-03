@@ -76,7 +76,7 @@ Agora que já conhecemos os comandos básicos, vamos turbinar o nosso ambiente c
 
 ## Guia Prático para Instalação de Plugins e Versões com o asdf
 Vamos instalar plugins e definir versões de linguagens e ferramentas populares com o **asdf**! A cada passo, você verá como configurar o ambiente para **Node.js**, **Java**, **Maven** e **Python**. 
-> Observação: se você gostaria de sentir o sabor da ferramenta antes de configurar o ambiente localmente você pode ir para o item **(Opcional) Laboratório**
+> Observação: se você gostaria de sentir o sabor da ferramenta antes de configurar o ambiente localmente você pode ir para o item **[(Opcional) Laboratório](#opcional-laboratório)**
 
 ### 🚀 Começando com Node.js
 Para configurar o **Node.js** no seu ambiente, siga estes passos:
