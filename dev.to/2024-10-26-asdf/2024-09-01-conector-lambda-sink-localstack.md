@@ -69,7 +69,7 @@ asdf global python 3.13.0
 ```bash
 asdf local python 3.13.0
 ```
-> Observação: esse comando gerar um arquivo chamado `.tool-versions` na pasta do projeto.
+> Observação: Este comando cria um arquivo chamado .tool-versions na pasta do projeto, permitindo configurar uma versão específica para cada repositório, independentemente da versão global.
 
 Agora que já conhecemos os comandos básicos, vamos turbinar o nosso ambiente com alguns plugins e versões. Vêm comigo!
 
@@ -94,27 +94,43 @@ asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
 ```bash
 asdf list
 ```
-Você deve algo assim:
+Você deve ver algo assim:
 ```
 nodejs
   No versions installed
 ```
 4. **Instalar uma versão do Node.js**: Liste as versões disponíveis ou instale diretamente a mais recente:
 ```bash
-asdf list-all nodejs
-   asdf install nodejs latest
+asdf list all nodejs
+```
+Você deve uma lista semelhante ao exemplo abaixo:
+```
+...
+22.11.0
+23.0.0
+23.1.0
+```
+
+Escolha uma das versões disponíveis e execute o comando abaixo para instalar:
+```bash
+asdf install nodejs 23.0.0
 ```
 
 5. **Definir a versão do Node.js**:
-   - **Globalmente** (para todo o sistema):
+  - **Globalmente** (para todo o sistema):
 ```bash
-asdf global nodejs latest
+asdf global nodejs 23.0.0
 ```
 
-> Não se esqueça, o próximo passo é opcional!
+> Não se esqueça, o próximo passo é opcional, mas para executar instale a versão **latest** com o comando `asdf install nodejs latest`
    - **Localmente** (apenas no diretório atual):
 ```bash
-asdf local nodejs v20.18.0 # ou qualquer outra versão disponível
+asdf local nodejs latest # ou qualquer outra versão disponível
+```
+
+6. **Verifique a versão do nodejs**:
+```bash
+node --version
 ```
 
 ### ☕ Configurando o Java
@@ -164,6 +180,11 @@ asdf install maven latest
 asdf global maven latest
 ```
 
+4. **Verifique a versão do maven instalada**:
+```bash
+mvn --version
+```
+
 ### 🐍 Configurando o Python
 1. **Instalar dependências para o Python**:
 ```bash
@@ -188,6 +209,11 @@ asdf install python latest
 4. **Definir a versão global do Python**:
 ```bash
 asdf global python latest
+```
+
+5. **Verifique a versão so python**:
+```bash
+python --version
 ```
 
 Esses passos são suficientes para instalar e configurar as linguagens e ferramentas essenciais no **asdf**. Com essas instruções, seu ambiente estará preparado para alternar entre versões específicas conforme necessário.
