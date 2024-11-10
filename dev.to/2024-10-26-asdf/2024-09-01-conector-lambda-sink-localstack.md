@@ -1,9 +1,29 @@
-## ASDF: O Gerenciador de Versões que Você Precisa Conhecer!
-Imagine que você está em um restaurante incrível, onde o menu oferece uma variedade de pratos principais. Cada prato pode ser personalizado com diferentes acompanhamentos, como arroz, salada ou batatas. Ao fazer seu pedido, você pode escolher a combinação exata que deseja, criando uma refeição perfeita para o seu paladar.
+## asdf: Gerenciando Node.js, Python, Java e muito mais em um Só Lugar
+Imagine que você está em um restaurante fast-food e você tem a liberdade de escolher os acompanhamentos do seu lanche. Você pode optar por um pão integral, carne de frango grelhada, queijo cheddar e tomate. Mas e se, na próxima vez, você quiser um hambúrguer com bacon e cebola caramelizada?
 
-O asdf funciona de forma semelhante no mundo da programação. Ele é o seu restaurante de versões, permitindo que você escolha um "prato" (ou linguagem de programação) e adicione os "acompanhamentos" (as versões) que melhor atendem às suas necessidades. Assim como você pode ter diferentes combinações de pratos e acompanhamentos, com o asdf, você pode alternar entre várias versões de ferramentas e linguagens de forma rápida e fácil, garantindo que sua refeição esteja sempre do jeito que você gosta.
+O asdf funciona como esse fast-food. No lugar de lanches, temos linguagens de programação e ferramentas como Python, Ruby, Node.js, etc. Em vez de ingredientes, temos versões específicas dessas linguagens.
 
-Neste post, vamos explorar como instalar e usar o **asdf** para gerenciar suas dependências de forma eficaz. Mas antes, vamos entender dois conceitos-chave: **plugins** e **versões**.
+Como funciona:
+
+**Você, o cliente**: É o desenvolvedor que precisa de uma determinada versão de uma linguagem para um projeto específico.
+**O menu**: É o repositório de plugins do **asdf**, onde você encontra todas as linguagens e ferramentas disponíveis.
+**O funcionário**: É o próprio **asdf**, que vai buscar a versão exata da linguagem que você escolheu e configurá-la para você.
+
+Exemplo:
+
+Imagine que você está trabalhando em dois projetos: um que usa Python 3.6 e outro que usa Python 3.9. Com o **asdf**, você pode instalar ambas as versões e configurar cada projeto para usar a versão correta, sem conflitos.
+
+Em resumo:
+
+O **asdf** é como um restaurante fast-food onde você monta o seu próprio lanche, mas em vez de comida, você está "montando" o seu ambiente de desenvolvimento. É uma ferramenta poderosa e flexível que pode te ajudar a gerenciar múltiplas versões de linguagens de programação de forma eficiente e organizada.
+
+Neste post, vamos explorar como instalar e usar o **asdf** para gerenciar suas dependências de forma eficaz. Mas antes, vamos entender:
+- **[O que é o asdf](#o-que-é-o-asdf)**
+- **[Plugins e versões](#plugins-e-versões)**
+- **[Principais Comandos do asdf](#principais-comandos-do-asdf)**
+- **[Instalação do asdf](#instalação-do-asdf)**
+- **[Guia Prático para Instalação de Plugins e Versões com o asdf](#guia-prático-para-instalação-de-plugins-e-versões-com-o-asdf)**
+- **[(Opcional) Laboratório](#opcional-laboratório)**
 
 ### **O que é o asdf?**
 O **[asdf](https://asdf-vm.com/pt-br/)** é um gerenciador de versões universal que permite que você utilize múltiplas versões de linguagens de programação e ferramentas, tudo em um só lugar. Com ele, você pode alternar entre diferentes versões de uma mesma linguagem como se estivesse trocando de roupa, facilitando seu fluxo de trabalho e evitando conflitos.
@@ -12,33 +32,15 @@ Ao contrário de outros gerenciadores, como o **rbenv** para Ruby ou o **nvm** p
 
 Ao contrário de outros gerenciadores, como o **[rbenv](https://github.com/rbenv/rbenv)** para Ruby ou o **[nvm](https://github.com/nvm-sh/nvm)** para Node.js, o **asdf** se destaca pela sua versatilidade. Ele suporta uma variedade de linguagens através de **plugins**. Você pode ter várias versões do Node.js, Python ou Java instaladas e alternar entre elas sem esforço.
 
-Fábio Akita fala sobre o asdf no seu vídeo [The DEFINITIVE UBUNTU Guide for Beginning Devs](https://www.youtube.com/watch?v=epiyExCyb2s&t=2440s), no minuto **40:42**.
+Se ainda não ficou muito claro, Fábio Akita fala e dá algumas dicas de uso do asdf no seu vídeo [The DEFINITIVE UBUNTU Guide for Beginning Devs](https://www.youtube.com/watch?v=epiyExCyb2s&t=2440s), no minuto **40:42**.
 
 Neste post, vamos explorar como instalar e usar o **asdf** para gerenciar suas dependências de forma prática. Mas antes, vamos entender dois conceitos-chave: **plugins** e **versões**.
 
-### Explicando os Conceitos
+### Plugins e versões
 De acordo com a [documentação oficial](https://asdf-vm.com/pt-br/manage/plugins.html), **plugins** são as extensões que permitem ao **asdf** gerenciar diferentes ferramentas, como Node.js, Ruby e Elixir. Já as **versões** são as diferentes iterações das dependências que você pode utilizar. Por exemplo, você pode optar pela versão **v20.18.0** do Node.js para um projeto específico, enquanto usa uma versão diferente para outro.
 
 Pronto para mergulhar no mundo do **asdf**? Então vamos à prática!
 
-## Instalação do asdf
-Clone o respositorio para a sua pasta home:
-```bash
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.1
-```
-
-Execute os comandos abaixo para configurar o seu `~/.bashrc`:
-```bash
-echo '. "$HOME/.asdf/completions/asdf.bash"' >> ~/.bashrc
-echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc
-```
-
-Aplique as configurações no terminal ativo:
-```bash
-source ~/.bashrc
-```
-
-> Para outros tipos de shell como o zsh ou fish shell, [acesse a documentação oficial do asdf](https://asdf-vm.com/pt-br/guide/getting-started.html#_3-adicionando-ao-seu-shell).
 
 ## Principais Comandos do asdf
 Esses são os comandos essenciais para instalar, listar e gerenciar versões no **asdf**.
@@ -74,9 +76,32 @@ asdf local python 3.13.0
 Agora que já conhecemos os comandos básicos, vamos turbinar o nosso ambiente com alguns plugins e versões. Vêm comigo!
 
 
+## Instalação do asdf
+> Observação: se você é daquelas pessoas que gosta de fazer testes na ferramenta antes de configurar no seu ambiente, você pode ir para o item **[(Opcional) Laboratório](#opcional-laboratório)** e práticar em um container docker para avaoliar o asdf.
+
+Clone o respositorio para a sua pasta home:
+```bash
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.1
+```
+
+Execute os comandos abaixo para configurar o seu `~/.bashrc`:
+```bash
+echo '. "$HOME/.asdf/completions/asdf.bash"' >> ~/.bashrc
+echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc
+```
+
+Aplique as configurações no terminal ativo:
+```bash
+source ~/.bashrc
+```
+
+> Para outros tipos de shell como o zsh ou fish shell, [acesse a documentação oficial do asdf](https://asdf-vm.com/pt-br/guide/getting-started.html#_3-adicionando-ao-seu-shell).
+
+
+
 ## Guia Prático para Instalação de Plugins e Versões com o asdf
 Vamos instalar plugins e definir versões de linguagens e ferramentas populares com o **asdf**! A cada passo, você verá como configurar o ambiente para **Node.js**, **Java**, **Maven** e **Python**. 
-> Observação: se você gostaria de sentir o sabor da ferramenta antes de configurar o ambiente localmente você pode ir para o item **[(Opcional) Laboratório](#opcional-laboratório)**
+
 
 ### 🚀 Começando com Node.js
 Para configurar o **Node.js** no seu ambiente, siga estes passos:
