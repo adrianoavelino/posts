@@ -1,14 +1,12 @@
-## asdf: Gerenciando Node.js, Python, Java e muito mais em um Só Lugar
+##  📦 asdf: Gerenciando Node.js, Python, Java e muito mais em um Só Lugar
 Imagine que você está em um restaurante fast-food e você tem a liberdade de escolher os acompanhamentos do seu lanche. Você pode optar por um pão integral, carne de frango grelhada, queijo cheddar e tomate. Mas e se, na próxima vez, você quiser um hambúrguer com bacon e cebola caramelizada?
 
 O asdf funciona como esse fast-food. No lugar de lanches, temos linguagens de programação e ferramentas como Python, Ruby, Node.js, etc. Em vez de ingredientes, temos versões específicas dessas linguagens.
 
 Como funciona:
-
-**Você, o cliente**: É o desenvolvedor que precisa de uma determinada versão de uma linguagem para um projeto específico.
-**O menu**: É o repositório de plugins do **asdf**, onde você encontra todas as linguagens e ferramentas disponíveis.
-**O funcionário**: É o próprio **asdf**, que vai buscar a versão exata da linguagem que você escolheu e configurá-la para você.
-
+- **Você, o cliente**: É o desenvolvedor que precisa de uma determinada versão de uma linguagem para um projeto específico.
+- **O menu**: É o repositório de plugins do **asdf**, onde você encontra todas as linguagens e ferramentas disponíveis.
+- **O funcionário**: É o próprio **asdf**, que vai buscar a versão exata da linguagem que você escolheu e configurá-la para você.
 Exemplo:
 
 Imagine que você está trabalhando em dois projetos: um que usa Python 3.6 e outro que usa Python 3.9. Com o **asdf**, você pode instalar ambas as versões e configurar cada projeto para usar a versão correta, sem conflitos.
@@ -102,21 +100,20 @@ source ~/.bashrc
 ## Guia Prático para Instalação de Plugins e Versões com o asdf
 Vamos instalar plugins e definir versões de linguagens e ferramentas populares com o **asdf**! A cada passo, você verá como configurar o ambiente para **Node.js**, **Java**, **Maven** e **Python**. 
 
-
 ### 🚀 Começando com Node.js
 Para configurar o **Node.js** no seu ambiente, siga estes passos:
 
-1. **Instalar dependências**: Vamos garantir que o sistema tenha todas as dependências que você precisa.
+1- **Instalar dependências**: Vamos garantir que o sistema tenha todas as dependências que você precisa.
 ```bash
 sudo apt-get install dirmngr gpg curl gawk
 ```
 
-2. **Adicionar o plugin do Node.js**: Com o plugin, o asdf será capaz de gerenciar versões do Node.
+2- **Adicionar o plugin do Node.js**: Com o plugin, o **asdf** será capaz de gerenciar versões do Node.
 ```bash
 asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
 ```
 
-3. **Verificar o plugin instalado**:
+3- **Verificar o plugin instalado**:
 ```bash
 asdf list
 ```
@@ -125,7 +122,7 @@ Você deve ver algo assim:
 nodejs
   No versions installed
 ```
-4. **Instalar uma versão do Node.js**:
+4- **Instalar uma versão do Node.js**:
 
 O primeiro passo antes de instalar uma versão, é escolher uma versão disponível e para isso liste as versões disponíveis:
 ```bash
@@ -145,7 +142,7 @@ Escolha uma das versões disponíveis e execute o comando abaixo para instalar, 
 asdf install nodejs 23.0.0
 ```
 
-5. **Definir a versão do Node.js**:
+5- **Definir a versão do Node.js**:
   - **Globalmente** (para todo o sistema):
 ```bash
 asdf global nodejs 23.0.0
@@ -157,66 +154,68 @@ asdf global nodejs 23.0.0
 asdf local nodejs latest # ou qualquer outra versão disponível
 ```
 
-6. **Verifique a versão do nodejs**:
+6- **Verifique a versão do nodejs**:
 ```bash
 node --version
 ```
 
+
 ### ☕ Configurando o Java
-1. **Adicionar o plugin do Java**: Isso permite instalar e gerenciar versões do Java no **asdf**.
+1- **Adicionar o plugin do Java**: Isso permite instalar e gerenciar versões do Java no **asdf**.
 ```bash
 asdf plugin add java https://github.com/halcyon/asdf-java.git
 ```
 
-2. **Verificar as versões disponíveis do Java**:
+2- **Verificar as versões disponíveis do Java**:
 ```bash
 asdf list all java
 ```
 
-3. **Configurar a variável JAVA_HOME**: Para garantir que o sistema identifique o Java.
+3- **Configurar a variável JAVA_HOME**: Para garantir que o sistema identifique o Java.
 ```bash
 echo . ~/.asdf/plugins/java/set-java-home.bash >> ~/.bashrc
 ```
 
-4. **Instalar uma versão específica do Java**:
+4- **Instalar uma versão específica do Java**:
 ```bash
 asdf install java adoptopenjdk-8.0.432+6
 ```
 > Observação: você pode executar o comando `asdf list all java` para ver as versões disponíveis.
 
-5. **Verificar a versão do Java instalada**:
+5- **Verificar a versão do Java instalada**:
 ```bash
 java -version
 ```
 
-6. **Definir a versão do Java globalmente**:
+6- **Definir a versão do Java globalmente**:
 ```bash
 asdf global java adoptopenjdk-8.0.432+6
 ```
 
 ### 🔧 Configurando o Maven
-1. **Adicionar o plugin do Maven**:
+1- **Adicionar o plugin do Maven**:
 ```bash
 asdf plugin add maven
 ```
 
-2. **Instalar a versão mais recente do Maven**:
+2- **Instalar a versão mais recente do Maven**:
 ```bash
 asdf install maven latest
 ```
 
-3. **Definir a versão global do Maven**:
+3- **Definir a versão global do Maven**:
 ```bash
 asdf global maven latest
 ```
 
-4. **Verifique a versão do maven instalada**:
+4- **Verifique a versão do maven instalada**:
 ```bash
 mvn --version
 ```
 
+
 ### 🐍 Configurando o Python
-1. **Instalar dependências para o Python**:
+1- **Instalar dependências para o Python**:
 ```bash
 sudo apt-get update && sudo apt-get install -y \
        make build-essential libssl-dev zlib1g-dev \
@@ -226,27 +225,28 @@ sudo apt-get update && sudo apt-get install -y \
        git
 ```
 
-2. **Adicionar o plugin do Python**:
+2- **Adicionar o plugin do Python**:
 ```bash
 asdf plugin add python
 ```
 
-3. **Instalar a versão mais recente do Python**:
+3- **Instalar a versão mais recente do Python**:
 ```bash
 asdf install python latest
 ```
 
-4. **Definir a versão global do Python**:
+4- **Definir a versão global do Python**:
 ```bash
 asdf global python latest
 ```
 
-5. **Verifique a versão do python**:
+5- **Verifique a versão do python**:
 ```bash
 python --version
 ```
 
 Esses passos são suficientes para instalar e configurar as linguagens e ferramentas essenciais no **asdf**. Com essas instruções, seu ambiente estará preparado para alternar entre versões específicas conforme necessário.
+
 
 ## (Opcional) Laboratório
 Se você está aqui é porque você ficou interessado em testar o asdf antes de configurar em sua máquina. Sendo assim, vamos lá!
